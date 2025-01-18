@@ -1,0 +1,9 @@
+# Lowest required versions
+
+matplotlib==3.5.1
+MDAnalysis==2.1.0
+numba==0.60.0
+numpy==1.22.3
+psutil==6.1.1
+scipy==1.5.3
+sympy==1.10.1
