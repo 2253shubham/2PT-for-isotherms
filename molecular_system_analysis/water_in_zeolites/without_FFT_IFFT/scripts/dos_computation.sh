@@ -3,11 +3,9 @@
 # modify the code for appropriate file locations
 
 #for i in 100-Henry;
-for i in {25..450..25};
-do
+for i in {25..450..25}; do
     echo "entering $i"
-    for j in RUN1 RUN2;
-    do
+    for j in RUN1 RUN2; do
         echo "executing code"
         cd output_files/$i
         python ../../dos_computation.py ../../../2PT_H2O_files/$i/$j/analysis.tpr ../../../2PT_H2O_files/$i/$j/prod1.trr ../../../2PT_H2O_files/$i/$j/prod1.xtc $j
@@ -20,7 +18,3 @@ do
     python ../../avg.py rot_dos_per_10_for_RUN1.txt rot_dos_per_10_for_RUN2.txt avg_rot_dos_per_10_for-100-Henry-system.txt
     cd ../../
 done
-
-
-
-
