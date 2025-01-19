@@ -1,5 +1,3 @@
-# Lowest required versions
-
 matplotlib==3.5.1
 MDAnalysis==2.1.0
 numba==0.60.0

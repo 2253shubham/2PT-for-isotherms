@@ -4,15 +4,14 @@
 
 arr=()
 while IFS= read -r line; do
-    echo "Text read from file: $line"
-    arr+=($(printf "%f" $line))
-    #arr+=($line)
-done < ref_ener.txt
+	echo "Text read from file: $line"
+	arr+=($(printf "%f" $line))
+	#arr+=($line)
+done <ref_ener.txt
 
 declare -i flag=0
 echo "entering outside loop"
-for j in RUN1 RUN2;
-do
+for j in RUN1 RUN2; do
 	echo $flag
 	echo ${arr[$flag]}
 	echo "linking start"
@@ -22,10 +21,10 @@ do
 	echo "linking complete"
 	cd ../../../without_FFT_IFFT/output_files/ref_data
 	echo "executing code"
-	python ../../dos_H2O_ref.py ../../../2PT_H2O_files/100-Henry/$j/analysis.tpr ../../../2PT_H2O_files/100-Henry/$j/prod1.trr ../../../2PT_H2O_files/100-Henry/$j/prod1.xtc 100-Henry-$j-tr_dos_ref.txt 100-Henry-$j-tr_ref_data.txt ${arr[$flag]} $j 
+	python ../../dos_H2O_ref.py ../../../2PT_H2O_files/100-Henry/$j/analysis.tpr ../../../2PT_H2O_files/100-Henry/$j/prod1.trr ../../../2PT_H2O_files/100-Henry/$j/prod1.xtc 100-Henry-$j-tr_dos_ref.txt 100-Henry-$j-tr_ref_data.txt ${arr[$flag]} $j
 	echo "executing code complete at this step"
 	cd ../../
-    flag=$(($flag+1))
+	flag=$(($flag + 1))
 done
 echo "exit outside the loop"
 

@@ -9,15 +9,15 @@ exp_data = sys.argv[1]
 GCN_cho = []
 GCN_qho = []
 
-kb = scipy.constants.k # Boltzmann Constant k
-Na = scipy.constants.Avogadro # Avogadro's number
-T = 308 # system temperature
-beta = 1/(kb*T)
-h = scipy.constants.Planck # Planck's constant
-m = 16.04*(1e-3)/Na # mass of one methane molecule
-#N_org = np.arange(0,190,10)
-#N_org = np.arange(0,190,20)
-N_org = np.arange(0,370,20)
+kb = scipy.constants.k  # Boltzmann Constant k
+Na = scipy.constants.Avogadro  # Avogadro's number
+T = 308  # system temperature
+beta = 1 / (kb * T)
+h = scipy.constants.Planck  # Planck's constant
+m = 16.04 * (1e-3) / Na  # mass of one methane molecule
+# N_org = np.arange(0,190,10)
+# N_org = np.arange(0,190,20)
+N_org = np.arange(0, 370, 20)
 N_org = N_org[0:]
 Npre_cho = []
 chepot_cho = []
@@ -35,10 +35,10 @@ a2 = []
 min1 = []
 min2 = []
 slope = []
-#slope.append(0)
+# slope.append(0)
 sl1 = []
 sl1.append(0)
-N = np.linspace(0,360,361)
+N = np.linspace(0, 360, 361)
 N = N[0:]
 P_cho = []
 P_qho = []
@@ -49,44 +49,46 @@ Ndq = []
 q1 = []
 
 # chemical potential
-r = (((2*np.pi*m*kb*T)/(h**2))**(1.5))*kb*T
-u0 = 0 - kb*T*np.log(r)
-u11 = (u0 + kb*T*np.log(1e4))
-u21 = (u0 + kb*T*np.log(2.5e6))
-u = np.linspace(u11,u21,1000)
-out1 = open("chem_pot._values_1e4_3e6_Pa.txt","w")
-out2 = open("considered_pressure_values_1e4_3e6.txt","w")
+r = (((2 * np.pi * m * kb * T) / (h**2)) ** (1.5)) * kb * T
+u0 = 0 - kb * T * np.log(r)
+u11 = u0 + kb * T * np.log(1e4)
+u21 = u0 + kb * T * np.log(2.5e6)
+u = np.linspace(u11, u21, 1000)
+out1 = open("chem_pot._values_1e4_3e6_Pa.txt", "w")
+out2 = open("considered_pressure_values_1e4_3e6.txt", "w")
 out1.truncate(0)
 out2.truncate(0)
 for i in range(len(u)):
     print(u[i], file=out1)
-    print(np.exp((u[i]-u0)/(kb*T)), file=out2)
+    print(np.exp((u[i] - u0) / (kb * T)), file=out2)
 out1.close()
 out2.close()
-#------------------------------------------------------------
+# ------------------------------------------------------------
 
 datao1 = np.loadtxt("ln-part-fn-cho.txt")
-#datao2 = np.loadtxt("Average_ln_Partition_Function_qho.txt")
+# datao2 = np.loadtxt("Average_ln_Partition_Function_qho.txt")
 data3 = np.loadtxt("chem_pot._values_1e4_3e6_Pa.txt")
 length3 = len(data3)
 
-spl1 = InterpolatedUnivariateSpline(N_org,datao1)
-#spl2 = InterpolatedUnivariateSpline(N_org,datao2) 
+spl1 = InterpolatedUnivariateSpline(N_org, datao1)
+# spl2 = InterpolatedUnivariateSpline(N_org,datao2)
 data1 = spl1(N)
-#data2 = spl2(N)
+# data2 = spl2(N)
 length1 = len(data1)
 
-def func(x, a, b, c, d, e):
-    return a + b*x + c*(x**2) +d*(x**3) + e*(x**4)
 
-popt , pconv = curve_fit(func,N,data1)
+def func(x, a, b, c, d, e):
+    return a + b * x + c * (x**2) + d * (x**3) + e * (x**4)
+
+
+popt, pconv = curve_fit(func, N, data1)
 a = popt[0]
 b = popt[1]
 c = popt[2]
 d = popt[3]
 e = popt[4]
 
-print(a,b,c,d,e)
+print(a, b, c, d, e)
 
 popt2, pconv2 = curve_fit(func, N_org, datao1)
 a2 = popt2[0]
@@ -95,37 +97,37 @@ c2 = popt2[2]
 d2 = popt2[3]
 e2 = popt2[4]
 
-print(a2,b2,c2,d2,e2)
+print(a2, b2, c2, d2, e2)
 
-q1 = a + b*N + c*(N**2) +d*(N**3) + e*(N**4)
-q2 = a2 + b2*N + c2*(N**2) +d2*(N**3) + e2*(N**4)
-data1=q2
+q1 = a + b * N + c * (N**2) + d * (N**3) + e * (N**4)
+q2 = a2 + b2 * N + c2 * (N**2) + d2 * (N**3) + e2 * (N**4)
+data1 = q2
 for i in range(len(N)):
-    print(N[i], q1[i], q2[i], q1[i]-q2[i], (q1[i]-q2[i])/q1[i])
+    print(N[i], q1[i], q2[i], q1[i] - q2[i], (q1[i] - q2[i]) / q1[i])
 
-out1 = open("ln-part-fn-cho-interpolated.txt","w")
+out1 = open("ln-part-fn-cho-interpolated.txt", "w")
 out1.truncate(0)
 for i in range(len(data1)):
-    print(data1[i],file = out1)
+    print(data1[i], file=out1)
 out1.close()
 
-out1 = open("Total-Helmholtz-interpolated.txt","w")
+out1 = open("Total-Helmholtz-interpolated.txt", "w")
 out1.truncate(0)
-for i in range(len(data1)-1):
-    print(-data1[i+1]/(i+1),file = out1)
+for i in range(len(data1) - 1):
+    print(-data1[i + 1] / (i + 1), file=out1)
 out1.close()
 
 plt.figure(3)
-plt.plot(N_org,datao1,"b--",label = "original data")
-plt.plot(N,data1,"r",label = "interpolated data")
-plt.plot(N,func(N,*popt),"k--",label = "spline_plus_curve_fit_4th_order")
-plt.plot(N_org,func(N_org,*popt2),"k--",label = "actual_curve_fit_4th_order")
+plt.plot(N_org, datao1, "b--", label="original data")
+plt.plot(N, data1, "r", label="interpolated data")
+plt.plot(N, func(N, *popt), "k--", label="spline_plus_curve_fit_4th_order")
+plt.plot(N_org, func(N_org, *popt2), "k--", label="actual_curve_fit_4th_order")
 plt.xlabel("N")
 plt.ylabel("lnQ")
 plt.legend()
 
 plt.figure(6)
-plt.plot(N, (q1-q2)/q1)
+plt.plot(N, (q1 - q2) / q1)
 plt.show()
 
 """
@@ -140,21 +142,21 @@ plt.plot(N,q2,label = "lnQ/N vs N interpolated")
 plt.legend()
 """
 for i in data3:
-    r1 = 0  
+    r1 = 0
     r2 = 0
     print()
     for j in range(length1):
-        r1 += np.exp(data1[j] + beta*i*N[j])
-        #r2 += np.exp(data2[j] + beta*i*N[j])
+        r1 += np.exp(data1[j] + beta * i * N[j])
+        # r2 += np.exp(data2[j] + beta*i*N[j])
     Gc.append(r1)
-    #Gq.append(r2)
-out1 = open("GCN-part-fn-cho.txt","w")
-out2 = open("ln-GCN-part-fn-cho.txt","w")
+    # Gq.append(r2)
+out1 = open("GCN-part-fn-cho.txt", "w")
+out2 = open("ln-GCN-part-fn-cho.txt", "w")
 out1.truncate(0)
 out2.truncate(0)
 for i in range(length3):
-    print(Gc[i],file = out1)
-    print(np.log(Gc[i]),file = out2)
+    print(Gc[i], file=out1)
+    print(np.log(Gc[i]), file=out2)
 out1.close()
 out2.close()
 """
@@ -188,7 +190,7 @@ ax = plt.gca()
 plt.plot(p,Ndc,label = "dis_GCN_cho")
 ax.set_xscale("log")
 #plt.plot(p,Ndq,label = "dis_qho")
-""" 
+"""
 """
 dataAo = np.loadtxt("Average-Helmholtz-cho.txt") 
 dataAsc = dataAo[0:]*Na/1e3
@@ -227,23 +229,23 @@ slope[0] = (data1[1] - data1[0])/(N[1] - N[0])
 slope.append((data1[length1-1] - data1[length1-2])/(N[length1-1] - N[length1-2]))
 """
 for i in range(length1):
-    slope.append(b + 2*c*N[i] + 3*d*(N[i]**2) + 4*e*(N[i]**3))
+    slope.append(b + 2 * c * N[i] + 3 * d * (N[i] ** 2) + 4 * e * (N[i] ** 3))
 
-out1 = open("Slope-lnQ-vs-N-cho_new.txt","w")
-#out1 = open("Slope-lnQ-vs-N-cho.txt","w")
-#out1 = open("Slope_lnQ_vs_N_qho.txt","w")
+out1 = open("Slope-lnQ-vs-N-cho_new.txt", "w")
+# out1 = open("Slope-lnQ-vs-N-cho.txt","w")
+# out1 = open("Slope_lnQ_vs_N_qho.txt","w")
 out1.truncate(0)
 for i in range(length1):
-    print(slope[i],file = out1)
+    print(slope[i], file=out1)
 out1.close()
 
 plt.figure(2)
-plt.plot(N,slope)
+plt.plot(N, slope)
 plt.xlabel("N")
 plt.ylabel("lnQvsN_slope")
 
-#fig2 = plt.figure(2)
-#fig2.savefig("Slope_lnQ_vs_N.png")
+# fig2 = plt.figure(2)
+# fig2.savefig("Slope_lnQ_vs_N.png")
 
 """
 for i in range(1,len(datao1)-1):
@@ -264,9 +266,9 @@ plt.legend()
 """
 
 data = np.loadtxt("ln-GCN-part-fn-cho.txt")
-length = len(data) 
+length = len(data)
 slope = []
-data3mod = data3[0:]*1e20
+data3mod = data3[0:] * 1e20
 """
 def func(x, a, b, c):
     return a + b*np.exp(c*x) 
@@ -279,10 +281,13 @@ c = popt[2]
 for i in range(len(data)):
     slope.append(b*c*1e20*np.exp(c*data3mod[i]))
 """
-def func(x, a, b, c, d, e, f):
-    return a + b*x + c*(x**2) + d*(x**3) + e*(x**4) + f*(x**5) 
 
-popt , pconv = curve_fit(func,data3mod,data)
+
+def func(x, a, b, c, d, e, f):
+    return a + b * x + c * (x**2) + d * (x**3) + e * (x**4) + f * (x**5)
+
+
+popt, pconv = curve_fit(func, data3mod, data)
 a = popt[0]
 b = popt[1]
 c = popt[2]
@@ -292,16 +297,25 @@ f = popt[5]
 
 
 for i in range(len(data)):
-    slope.append((b + 2*c*data3mod[i] + 3*d*(data3mod[i]**2) + 4*e*(data3mod[i]**3) + 5*f*(data3mod[i]**4))*1e20)
+    slope.append(
+        (
+            b
+            + 2 * c * data3mod[i]
+            + 3 * d * (data3mod[i] ** 2)
+            + 4 * e * (data3mod[i] ** 3)
+            + 5 * f * (data3mod[i] ** 4)
+        )
+        * 1e20
+    )
     # + 6*g*(data3mod[i]**5) g = popt[6] + g*(x**6) , g
 
 plt.figure(4)
-plt.plot(data3,data,"r--",label = "data")
-plt.plot(data3,func(data3mod,*popt),"k--",label = "curve_fit_5th_order")
+plt.plot(data3, data, "r--", label="data")
+plt.plot(data3, func(data3mod, *popt), "k--", label="curve_fit_5th_order")
 plt.xlabel("chem.pot.")
 plt.ylabel("lnGCN")
 plt.legend()
-    
+
 """
 for i in range(1,length-1):
     s1 = (data[i] - data[i-1])/(data3[i] - data3[i-1])
@@ -316,10 +330,10 @@ for i in range(length):
     print(slope[i],file = out1)
 out1.close()
 """
-out1 = open("Slope-lnGCNpf-vs-chempot-cho_newp.txt","w")
+out1 = open("Slope-lnGCNpf-vs-chempot-cho_newp.txt", "w")
 out1.truncate(0)
 for i in range(length):
-    print(slope[i],file = out1)
+    print(slope[i], file=out1)
 out1.close()
 """
 plt.figure(3)
@@ -330,13 +344,13 @@ fig2 = plt.figure(2)
 fig2.savefig("Slope_lnGCN_vs_N.png")
 """
 data4 = np.loadtxt("Slope-lnGCNpf-vs-chempot-cho_newp.txt")
-#data5 = np.loadtxt("Slope_lnGCNpf_vs_chempot_qho.txt")
+# data5 = np.loadtxt("Slope_lnGCNpf_vs_chempot_qho.txt")
 length4 = len(data4)
 for i in range(length4):
-    a = data4[i]/beta
+    a = data4[i] / beta
     Npre_cho.append(a)
     chepot_cho.append(data3[i])
-    pressure_cho.append(np.exp((data3[i]-u0)/(kb*T)))
+    pressure_cho.append(np.exp((data3[i] - u0) / (kb * T)))
 """
 for i in range(length4):
     a = data5[i]/beta
@@ -351,87 +365,99 @@ for i in range(len(pressure_cho)):
     print(np.float(pressure_cho[i]), file=out)
 out.close()
 
-#for methane
+# for methane
 Tc = 190.4
-Pc = 46*10**5
+Pc = 46 * 10**5
 omega = 0.011
 R = 8.314
-kappa = 0.37464+1.54226*omega-0.26992*omega**2
-Tr = T/Tc
-alpha = (1+kappa*(1-Tr**0.5))**2
-a = 0.45724*alpha*(R**2*Tc**2)/(Pc)
-b = 0.07780*R*Tc/Pc
+kappa = 0.37464 + 1.54226 * omega - 0.26992 * omega**2
+Tr = T / Tc
+alpha = (1 + kappa * (1 - Tr**0.5)) ** 2
+a = 0.45724 * alpha * (R**2 * Tc**2) / (Pc)
+b = 0.07780 * R * Tc / Pc
 fugacity_coeff = []
 pressure_actual = []
 zep = 0
 for i in pressure_cho:
     c1 = i
-    c2 = b*i - R*T
-    c3 = a - 2*b*R*T - 3*i*b**2
-    c4 = i*b**3 - a*b + R*T*b**2
+    c2 = b * i - R * T
+    c3 = a - 2 * b * R * T - 3 * i * b**2
+    c4 = i * b**3 - a * b + R * T * b**2
     coeffs = [c1, c2, c3, c4]
     d = np.roots(coeffs)
     e = float(d[np.isreal(d)].real)
-    lnf = i*e/(R*T) - 1 + np.log((R*T/i)/(e-b)) - (a/(2*(2**(0.5))*R*T*b))*np.log((e+b+b*2**0.5)/(e+b-b*2**0.5))
+    lnf = (
+        i * e / (R * T)
+        - 1
+        + np.log((R * T / i) / (e - b))
+        - (a / (2 * (2 ** (0.5)) * R * T * b))
+        * np.log((e + b + b * 2**0.5) / (e + b - b * 2**0.5))
+    )
     fugacity_coeff.append(np.exp(lnf))
-    pressure_actual.append(i/fugacity_coeff[zep])
+    pressure_actual.append(i / fugacity_coeff[zep])
     zep = zep + 1
 
 out = open("pressures_from_chem_pot_in_kPa.txt", "w")
 out.truncate(0)
 for i in range(len(pressure_cho)):
-    print(np.float(pressure_actual[i]/1000), file=out)
+    print(np.float(pressure_actual[i] / 1000), file=out)
 out.close()
 
 out = open("N_predicted_from_GCN.txt", "w")
 out.truncate(0)
 for i in range(len(Npre_cho)):
-    print(np.float(pressure_cho[i]/1e3),np.float(Npre_cho[i]/24), file=out)
+    print(np.float(pressure_cho[i] / 1e3), np.float(Npre_cho[i] / 24), file=out)
 out.close()
 
 plt.figure(1)
-plt.plot(pressure_cho,Npre_cho,"b--",label = "cho_GCN_5th-order_poly_fitted")
+plt.plot(pressure_cho, Npre_cho, "b--", label="cho_GCN_5th-order_poly_fitted")
 ax = plt.gca()
 ax.set_xscale("log")
-#plt.plot(pressure_cho,Npre_qho,label = "qho_GCN")
+# plt.plot(pressure_cho,Npre_qho,label = "qho_GCN")
 plt.xlabel("Pressure in SI units")
 plt.ylabel("Loading")
 
-datac1 = np.loadtxt(fname = "Slope-lnQ-vs-N-cho_new.txt")
-#data2 = np.loadtxt(fname = "Slope_lnQ_vs_N_qho.txt")
+datac1 = np.loadtxt(fname="Slope-lnQ-vs-N-cho_new.txt")
+# data2 = np.loadtxt(fname = "Slope_lnQ_vs_N_qho.txt")
 lengthc1 = len(datac1)
 for i in range(lengthc1):
-    u1.append(-kb*T*datac1[i])
-    #u2.append(-kb*T*data2[i])
-    p1.append(np.exp((u1[i]-u0)/(kb*T)))
-    #p2.append(np.exp((u2[i]-u0)/(kb*T)))
+    u1.append(-kb * T * datac1[i])
+    # u2.append(-kb*T*data2[i])
+    p1.append(np.exp((u1[i] - u0) / (kb * T)))
+    # p2.append(np.exp((u2[i]-u0)/(kb*T)))
 
 fugacity_coeff = []
 pressure_actual = []
 zep = 0
 for i in p1:
     c1 = i
-    c2 = b*i - R*T
-    c3 = a - 2*b*R*T - 3*i*b**2
-    c4 = i*b**3 - a*b + R*T*b**2
+    c2 = b * i - R * T
+    c3 = a - 2 * b * R * T - 3 * i * b**2
+    c4 = i * b**3 - a * b + R * T * b**2
     coeffs = [c1, c2, c3, c4]
     d = np.roots(coeffs)
     e = float(d[np.isreal(d)].real)
-    lnf = i*e/(R*T) - 1 + np.log((R*T/i)/(e-b)) - (a/(2*(2**(0.5))*R*T*b))*np.log((e+b+b*2**0.5)/(e+b-b*2**0.5))
+    lnf = (
+        i * e / (R * T)
+        - 1
+        + np.log((R * T / i) / (e - b))
+        - (a / (2 * (2 ** (0.5)) * R * T * b))
+        * np.log((e + b + b * 2**0.5) / (e + b - b * 2**0.5))
+    )
     fugacity_coeff.append(np.exp(lnf))
-    pressure_actual.append(i/fugacity_coeff[zep])
+    pressure_actual.append(i / fugacity_coeff[zep])
     zep = zep + 1
 
 out = open("P_predicted_from_CN.txt", "w")
 out.truncate(0)
 for i in range(len(p1)):
-    print(np.float(p1[i]/1e3),np.float(N[i]/24), file=out)
+    print(np.float(p1[i] / 1e3), np.float(N[i] / 24), file=out)
 out.close()
 
 plt.figure(1)
-plt.plot(p1,N, label = "cho_CN_4th-order_poly_fitted")
+plt.plot(p1, N, label="cho_CN_4th-order_poly_fitted")
 ax.set_xscale("log")
-#plt.plot(p2,N, label = "qho_CN")
+# plt.plot(p2,N, label = "qho_CN")
 """
 datar3 = np.loadtxt(fname = "Average-Entropy-cho.txt")
 datar3 = datar3[0:]*kb
@@ -485,20 +511,20 @@ for j in range(length1):
 plt.legend(loc = 'upper left')
 p1 = np.exp((data1[0:]-u0)/(kb*T))
 """
-exp_pr = np.loadtxt(fname = exp_data,skiprows = 1,usecols = 0)
-exp_N = np.loadtxt(fname = exp_data,skiprows = 1,usecols = 1)
-exp_N = exp_N[0:]*12
+exp_pr = np.loadtxt(fname=exp_data, skiprows=1, usecols=0)
+exp_N = np.loadtxt(fname=exp_data, skiprows=1, usecols=1)
+exp_N = exp_N[0:] * 12
 plt.figure(1)
 ax = plt.gca()
 ax.set_xscale("log")
-#plt.plot(p1,min1, label = "cho_A-uN_up")
-#plt.plot(p1,min2, label = "qho_A-uN")
-plt.plot(exp_pr,exp_N,label = "mfi_data")
-plt.xlim(5e3,3e6)
+# plt.plot(p1,min1, label = "cho_A-uN_up")
+# plt.plot(p1,min2, label = "qho_A-uN")
+plt.plot(exp_pr, exp_N, label="mfi_data")
+plt.xlim(5e3, 3e6)
 plt.legend()
 plt.show()
-#fig = plt.figure(1)
-#fig.savefig("loading_vs_P.png")
+# fig = plt.figure(1)
+# fig.savefig("loading_vs_P.png")
 
 """
 gas_helm = np.loadtxt(fname = "Average-Gas-Helmholtz-cho.txt")
@@ -551,35 +577,54 @@ data2 = np.loadtxt("chem_pot._values_1e4_3e6_Pa.txt")
 l2 = len(data2)
 u1 = data2[0]
 u2 = data2[::-1][0]
-j = np.linspace(u1,u2,5)
-FL = np.zeros((len(data2),1))
+j = np.linspace(u1, u2, 5)
+FL = np.zeros((len(data2), 1))
 for i in range(len(data2)):
-    tot = np.exp(data1 + beta*data2[i]*N)
-    FL[i] = N[int(np.float(np.where(tot==tot.max())[0]))]
+    tot = np.exp(data1 + beta * data2[i] * N)
+    FL[i] = N[int(np.float(np.where(tot == tot.max())[0]))]
 out = open("N_predicted_from_FL.txt", "w")
 out.truncate(0)
 for i in range(len(FL)):
-    print(np.float(np.exp((data3[i]-u0)/(kb*T))/1e3),np.float(FL[i]/24), file=out)
+    print(
+        np.float(np.exp((data3[i] - u0) / (kb * T)) / 1e3),
+        np.float(FL[i] / 24),
+        file=out,
+    )
 out.close()
 
 
-data1 = np.loadtxt(fname="ln-part-fn-cho-interpolated.txt") 
-data2 = np.loadtxt("chem_pot._values_1e4_3e6_Pa.txt") 
-l2 = len(data2) 
-u1 = data2[0] 
-u2 = data2[::-1][0] 
-j = np.linspace(u1,u2,5) 
-tot = np.zeros((361,5)) 
-for i in range(len(j)): 
-   tot[:,i] = (data1 + beta*j[i]*N)*(-1/beta)
-out = open("plot7_manuscript_data.txt", "w") 
-out.truncate(0) 
-for i in range(len(N)): 
-   print(np.float(N[i]/24),np.float(tot[i,0]),np.float(tot[i,1]),np.float(tot[i,2]),np.float(tot[i,3]),np.float(tot[i,4]), file=out) 
+data1 = np.loadtxt(fname="ln-part-fn-cho-interpolated.txt")
+data2 = np.loadtxt("chem_pot._values_1e4_3e6_Pa.txt")
+l2 = len(data2)
+u1 = data2[0]
+u2 = data2[::-1][0]
+j = np.linspace(u1, u2, 5)
+tot = np.zeros((361, 5))
+for i in range(len(j)):
+    tot[:, i] = (data1 + beta * j[i] * N) * (-1 / beta)
+out = open("plot7_manuscript_data.txt", "w")
+out.truncate(0)
+for i in range(len(N)):
+    print(
+        np.float(N[i] / 24),
+        np.float(tot[i, 0]),
+        np.float(tot[i, 1]),
+        np.float(tot[i, 2]),
+        np.float(tot[i, 3]),
+        np.float(tot[i, 4]),
+        file=out,
+    )
 out.close()
-out = open("plot7_manuscript_data_scaled_by_kbT.txt", "w") 
-out.truncate(0) 
-for i in range(len(N)): 
-   print(np.float(N[i]/24),np.float(tot[i,0]*beta),np.float(tot[i,1]*beta),np.float(tot[i,2]*beta),np.float(tot[i,3]*beta),np.float(tot[i,4]*beta), file=out) 
+out = open("plot7_manuscript_data_scaled_by_kbT.txt", "w")
+out.truncate(0)
+for i in range(len(N)):
+    print(
+        np.float(N[i] / 24),
+        np.float(tot[i, 0] * beta),
+        np.float(tot[i, 1] * beta),
+        np.float(tot[i, 2] * beta),
+        np.float(tot[i, 3] * beta),
+        np.float(tot[i, 4] * beta),
+        file=out,
+    )
 out.close()
-
