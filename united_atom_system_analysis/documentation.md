@@ -1,16 +1,50 @@
-Quick steps to perform 2PT analysis
+# Quick Steps to Perform 2PT Analysis
 
-1. Generate velocity autocorrelation data from MD simulations (please refer "Computational details for methane adsorption in silicalite" section of our [publication](https://doi.org/10.1063/5.0099790), to understand how to set up the simulations and required parameters)	
-2. Run [IAG_DoS_comp.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/HS_DoS_comp.py)/[HS_DoS_comp.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Hard_Sphere_approximation/scripts/HS_DoS_comp.py) on the velocity autocorrelation data obtained from MD simulations. 
-i.	For IAG systems, you will need to run an extra code [refer_prop.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/refer_prop.py) to generate the reference IAG parameters. 
-2.	Extract all the parameters / thermodynamic properties and do an averaging (if needed). 
-3.	To compute isotherms, you need the natural log of partition functions (one of the outputs of the above step). You can copy them in a file. Create the “analysis” folder, copy the file to it 
-4.	Run [analysis.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/analysis.py) code. One may need to modify a few things in the code:
-i.	Temperature, mass of particles adsorbed, one needs to modify them as per case-by-case basis
-ii.	Range of pressures/chemical potentials to investigate 
-The code generates the isotherms data in the 3 files:
-i.	P_predicted_from_CN.txt (prediction of pressures for considered loadings using Canonical Partition Function approach.)
-ii.	N_predicted_from_GCN.txt (1st way for prediction of loading for considered pressures using Grand Canonical Partition Function approach 
-iii. N_predicted_from_FL.txt ((2nd way for prediction of loading for considered pressures using Grand Canonical Partition Function approach)
-Please refer "2PT Analysis of adsorption" section of our [publication](https://doi.org/10.1063/5.0099790)
-5.	Plot the above to get isotherms using [comp_plots_isotherm.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/comp-plots-code.py). You may use other plotting softwares(xmgrace)
+## 1. Generate Velocity Autocorrelation Data
+- Perform MD simulations to generate velocity autocorrelation data.
+- Refer to the **"Computational details for methane adsorption in silicalite"** section of our [publication](https://doi.org/10.1063/5.0099790) to understand how to set up the simulations and required parameters.
+
+---
+
+## 2. Run DoS Computation Scripts
+- Use the velocity autocorrelation data obtained from MD simulations and run one of the following scripts:
+  - [IAG_DoS_comp.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/HS_DoS_comp.py) (for Ideal Adsorbed Gas systems)
+  - [HS_DoS_comp.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Hard_Sphere_approximation/scripts/HS_DoS_comp.py) (for Hard Sphere systems)
+
+### Note for IAG Systems:
+- Run the additional script [refer_prop.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/refer_prop.py) to generate reference IAG parameters.
+
+---
+
+## 3. Extract Parameters and Thermodynamic Properties
+- Extract all parameters and thermodynamic properties.
+- Perform averaging if required.
+
+---
+
+## 4. Compute Isotherms
+1. Obtain the natural log of partition functions (one of the outputs from the previous step).
+2. Save the results in a file and create an `analysis` folder. Copy the file to this folder.
+3. Run the [analysis.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/analysis.py) script. 
+
+### Modifications Needed:
+- Update the script with case-specific parameters:
+  - **Temperature**
+  - **Mass of adsorbed particles**
+  - **Range of pressures/chemical potentials**
+
+### Output Files:
+- The script generates the following files with isotherms data:
+  1. `P_predicted_from_CN.txt`: Prediction of pressures for considered loadings using the Canonical Partition Function approach.
+  2. `N_predicted_from_GCN.txt`: Loading predictions for considered pressures using the Grand Canonical Partition Function approach (Method 1).
+  3. `N_predicted_from_FL.txt`: Loading predictions for considered pressures using the Grand Canonical Partition Function approach (Method 2).
+
+Refer to the **"2PT Analysis of adsorption"** section of our [publication](https://doi.org/10.1063/5.0099790) for further details.
+
+---
+
+## 5. Plot Isotherms
+- Use the output files to generate isotherm plots with the script [comp_plots_isotherm.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/comp-plots-code.py).
+- Alternatively, other plotting software like **xmgrace** can also be used.
+
+---

@@ -32,4 +32,4 @@ pip install -r /path/to/requirements.txt
 
 If you are using this work, please cite: 
 
-S. Malviya, J.C. Tapia, and P. Bai, “Calculating adsorption isotherms using the two-phase thermodynamic method and molecular dynamics simulations,” J. Appl. Phys. 132(3), 034701 (2022).
+[S. Malviya, J.C. Tapia, and P. Bai, “Calculating adsorption isotherms using the two-phase thermodynamic method and molecular dynamics simulations,” J. Appl. Phys. 132(3), 034701 (2022)](https://doi.org/10.1063/5.0099790).
