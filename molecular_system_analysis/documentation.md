@@ -2,7 +2,7 @@
 
 > **Note**: All thermodynamic properties hardcoded in the scripts pertain to water treated using the TIP4P model, as it was the adsorbate used.
 
-## 1. Methods to Compute DoS
+## 1. Methods to Compute Density of States (DoS)
 
 ### 1.1 Using FFT/IFFT (Indirect Method)
 - **Code Location**: [Scripts for FFT/IFFT](https://github.com/2253shubham/2PT-for-isotherms/tree/main/molecular_system_analysis/water_in_zeolites/with_FFT_IFFT/scripts)
