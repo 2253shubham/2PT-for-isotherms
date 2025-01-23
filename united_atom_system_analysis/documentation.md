@@ -6,7 +6,7 @@
 
 ---
 
-## 2. Run DoS Computation Scripts
+## 2. Run Density of States (DoS) Computation Scripts
 - Use the velocity autocorrelation data obtained from MD simulations and run one of the following scripts:
   - [IAG_DoS_comp.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Ideal_Adsorbed_Gas_approximation/scripts/HS_DoS_comp.py) (for Ideal Adsorbed Gas systems)
   - [HS_DoS_comp.py](https://github.com/2253shubham/2PT-for-isotherms/blob/main/united_atom_system_analysis/Hard_Sphere_approximation/scripts/HS_DoS_comp.py) (for Hard Sphere systems)
@@ -35,9 +35,9 @@
 
 ### Output Files:
 - The script generates the following files with isotherms data:
-  1. `P_predicted_from_CN.txt`: Prediction of pressures for considered loadings using the Canonical Partition Function approach.
-  2. `N_predicted_from_GCN.txt`: Loading predictions for considered pressures using the Grand Canonical Partition Function approach (Method 1).
-  3. `N_predicted_from_FL.txt`: Loading predictions for considered pressures using the Grand Canonical Partition Function approach (Method 2).
+  1. `P_predicted_from_CN.txt`: Prediction of pressures for considered loadings using the Canonical Partition Function (CN) approach.
+  2. `N_predicted_from_GCN.txt`: Loading predictions for considered pressures using the Grand Canonical Partition Function (GCN) approach (Method 1).
+  3. `N_predicted_from_FL.txt`: Loading predictions for considered pressures using the GCN Function approach (Method 2).
 
 Refer to the **"2PT Analysis of adsorption"** section of our [publication](https://doi.org/10.1063/5.0099790) for further details.
 
